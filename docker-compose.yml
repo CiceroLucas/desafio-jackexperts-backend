@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: always
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_TCP_PORT: ${MYSQL_DOCKER_PORT}
+    ports:
+      - '${MYSQL_LOCAL_PORT}:${MYSQL_DOCKER_PORT}'
+    expose:
+      - ${MYSQL_DOCKER_PORT}
+    volumes:
+      - mysql_volume:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      retries: 10
+      start_period: 30s
+      timeout: 10s
+
+  app:
+    depends_on:
+      - mysql
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: nestjs-app
+    restart: always
+    env_file: ./.env
+    ports:
+      - '${NEST_LOCAL_PORT}:${NEST_DOCKER_PORT}'
+    environment:
+      TYPEORM_CONNECTION: mysql
+      MYSQL_HOST: mysql
+      MYSQL_LOCAL_PORT: ${MYSQL_DOCKER_PORT}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
+    stdin_open: true
+    tty: true
+
+volumes:
+  mysql_volume:
