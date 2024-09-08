@@ -45,25 +45,28 @@ Acesse a aplicação via http://localhost:3001
 
 ## Endpoints Principais
 
-Autenticação
+### Autenticação
 
-* Login: POST api/auth/login
+* Login: POST api/login
   * Body: { "email": "user@example.com", "password": "yourpassword" }
   * Retorna: JWT token
+* Registro de usuário: POST api/register
+  * Body: { "name": "username", "email": "user@example.com", "password": "yourpassword" }
+  * Registra usuário
  
-Tarefas
+### Tarefas
 * Criar Tarefa: POST api/tasks
   * Body: { "title": "Nova Tarefa", "description": "Descrição da tarefa" }
   * Requer token JWT
-* Listar Tarefas do Usuário: GET /tasks
+* Listar Tarefas do Usuário: GET api/tasks
   * Retorna todas as tarefas do usuário autenticado
-* Atualizar Status da Tarefa: PATCH /tasks/:id
+* Atualizar Status da Tarefa: PATCH api/tasks/:id
   * Body: { "status": "completed" }
   * Atualiza o status de uma tarefa específica
-* Atualizar Status da Tarefa: PATCH /tasks/update/:id
+* Atualizar Status da Tarefa: PATCH api/tasks/update/:id
   * Body: { "title": "Atualizado", "description": "Atualizado" }
   * Atualiza uma tarefa específica
-* Deletar Tarefa: DELETE /tasks/:id
+* Deletar Tarefa: DELETE api/tasks/:id
   * Remove uma tarefa do usuário autenticado.
 
 ## Decisões Técnicas
