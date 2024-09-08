@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Gerenciador de Tarefas API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esta é uma API de gerenciamento de tarefas desenvolvida com NestJS, utilizando TypeORM para interagir com o banco de dados MySQL. A API suporta operações de criação, leitura, atualização e exclusão (CRUD) de tarefas, além de recursos de autenticação e controle de acesso por usuários.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Funcionalidades
+* Autenticação JWT: A API utiliza tokens JWT para autenticar e autorizar usuários.
+* Gerenciamento de Tarefas: Criação, listagem, atualização e exclusão de tarefas com diferentes status.
+* Relacionamento Usuário-Tarefa: Cada tarefa está associada a um usuário específico.
 
-## Description
+## Deploy da api
+https://jackexperts-api.onrender.com/
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Documentação da API
+https://jackexperts-api.onrender.com/doc
 
-## Installation
+## Instalação
+Clone o repositório e instale as depedências do projeto:
+```
+git clone https://github.com/CiceroLucas/desafio-jackexperts-backend.git
 
-```bash
-$ npm install
+cd desafio-jackexperts-backend
+
+npm install
 ```
 
-## Running the app
+Tenha o MySQL na sua máquina
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+Crie um arquivo .env na raiz do projeto com as seguintes variáveis:
+```
+MYSQL_CONNECTION=mysql
+MYSQL_HOST=localhost
+MYSQL_DOCKER_PORT=3306
+MYSQL_DATABASE=tasks
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=yourpassword
+JWT_SECRET=your_jwt_secret
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Execute a aplicação:
+```
+npm run dev
 ```
 
-## Support
+Acesse a aplicação via http://localhost:3001
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Endpoints Principais
 
-## Stay in touch
+Autenticação
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+* Login: POST api/auth/login
+  * Body: { "email": "user@example.com", "password": "yourpassword" }
+  * Retorna: JWT token
+ 
+Tarefas
+* Criar Tarefa: POST api/tasks
+  * Body: { "title": "Nova Tarefa", "description": "Descrição da tarefa" }
+  * Requer token JWT
+* Listar Tarefas do Usuário: GET /tasks
+  * Retorna todas as tarefas do usuário autenticado
+* Atualizar Status da Tarefa: PATCH /tasks/:id
+  * Body: { "status": "completed" }
+  * Atualiza o status de uma tarefa específica
+* Atualizar Status da Tarefa: PATCH /tasks/update/:id
+  * Body: { "title": "Atualizado", "description": "Atualizado" }
+  * Atualiza uma tarefa específica
+* Deletar Tarefa: DELETE /tasks/:id
+  * Remove uma tarefa do usuário autenticado.
 
-## License
+## Decisões Técnicas
 
-Nest is [MIT licensed](LICENSE).
+* NestJS: Escolhi o NestJS pela sua arquitetura modular e suporte nativo a injeção de dependências, o que facilita a organização de grandes projetos. Ele também é compatível com TypeScript, o que permite uma melhor verificação de tipos.
+* TypeORM: Para persistência de dados, o TypeORM foi selecionado por sua facilidade de integração com o NestJS e suporte a recursos avançados de ORM, como migrações e relacionamentos.
+* MySQL: O MySQL foi escolhido como banco de dados por sua robustez, confiabilidade e ampla adoção no mercado. A combinação com o TypeORM possibilita um mapeamento eficiente de entidades.
+* JWT: Para autenticação, optei por tokens JWT, que são amplamente utilizados em APIs REST. Eles oferecem uma maneira segura e escalável de autenticar e autorizar usuários sem a necessidade de armazenar estado no servidor.Docker: Docker foi utilizado para garantir um ambiente consistente e facilitar o deploy em diferentes plataformas, além de simplificar o gerenciamento do MySQL e da API em containers.
+* Docker: O Docker foi utilizado para garantir um ambiente consistente e facilitar o deploy em diferentes plataformas, além de simplificar o gerenciamento do MySQL e da API em containers.
